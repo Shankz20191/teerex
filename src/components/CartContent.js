@@ -1,6 +1,6 @@
-import styled from 'styled-components';
 import { CartItem } from './CartItem';
 import { useCartContext } from '../context/cart_context';
+import { Wrapper } from '../styles/CartContent';
 
 export const CartContent = () => {
   const { cart, total_amount } = useCartContext();
@@ -25,20 +25,3 @@ export const CartContent = () => {
     </Wrapper>
   );
 };
-
-const Wrapper = styled.section`
-  h1 {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .total {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    padding-right: 15rem;
-    h4 {
-      padding-right: 5px;
-    }
-  }
-`;

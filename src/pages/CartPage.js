@@ -1,14 +1,11 @@
-import styled from 'styled-components';
 import { CartContent } from '../components/CartContent';
 
 export const CartPage = () => {
   return (
     <main>
-      <Wrapper className="page">
+      <section className="page">
         <CartContent />
-      </Wrapper>
+      </section>
     </main>
   );
 };
-
-const Wrapper = styled.section``;

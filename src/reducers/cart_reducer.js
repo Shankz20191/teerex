@@ -1,3 +1,5 @@
+import { toast } from 'react-toastify';
+
 import {
   ADD_TO_CART,
   DECREASE_PRODUCT_QUANTITY,
@@ -5,25 +7,40 @@ import {
   INCREASE_PRODUCT_QUANTITY,
 } from '../actions';
 
+const toastConfig = {
+  position: 'top-center',
+  autoClose: 3000,
+  hideProgressBar: true,
+  closeOnClick: true,
+  pauseOnHover: true,
+  draggable: true,
+  progress: undefined,
+  theme: 'colored',
+};
+
 const cart_reducer = (state, action) => {
   if (action.type === ADD_TO_CART) {
     const newCart = { ...state };
+    const { cart } = newCart;
+    const { id, price } = action.payload;
 
-    const index = newCart.cart.findIndex((cart) => {
-      return cart.id === action.payload.id;
-    });
+    const index = cart.findIndex((item) => item.id === id);
 
     if (index === -1) {
-      newCart.cart = [...newCart.cart, { ...action.payload, quantity: 1 }];
+      cart.push({ ...action.payload, quantity: 1 });
+      newCart.total_amount += price;
+      newCart.total_quantity += 1;
     } else {
-      newCart.cart[index] = {
-        ...newCart.cart[index],
-        quantity: newCart.cart[index].quantity + 1,
-      };
-    }
+      const currentItem = cart[index];
 
-    newCart.total_amount += action.payload.price;
-    newCart.total_quantity += 1;
+      if (currentItem.max_quantity > currentItem.quantity) {
+        currentItem.quantity += 1;
+        newCart.total_amount += price;
+        newCart.total_quantity += 1;
+      } else {
+        toast.error('Max quantity reached!', toastConfig);
+      }
+    }
 
     return newCart;
   }
@@ -56,6 +73,7 @@ const cart_reducer = (state, action) => {
           newCart.total_quantity += 1;
         } else {
           newCart.total_quantity += 0;
+          toast.error('Max quantity reached!', toastConfig);
         }
       }
     });
